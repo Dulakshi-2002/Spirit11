@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Corrected import statement
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
@@ -20,7 +20,7 @@ const isTokenValid = (token) => {
   if (!token) return false;
 
   try {
-    const decoded = jwt_decode(token);
+    const decoded = jwtDecode(token); // Use the named import
     return decoded.exp * 1000 > Date.now();
   } catch (err) {
     return false;

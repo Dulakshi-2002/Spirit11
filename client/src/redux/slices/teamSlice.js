@@ -3,212 +3,176 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
-// Get all players
-export const getPlayers = createAsyncThunk(
-  "players/getPlayers",
+// Get user team
+export const getUserTeam = createAsyncThunk(
+  "team/getUserTeam",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/players`);
+      const response = await axios.get(`${API_URL}/teams/my-team`);
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch players"
+        error.response?.data?.message || "Failed to fetch team"
       );
     }
   }
 );
 
-// Get player by ID
-export const getPlayerById = createAsyncThunk(
-  "players/getPlayerById",
-  async (id, { rejectWithValue }) => {
+// Create team
+export const createTeam = createAsyncThunk(
+  "team/createTeam",
+  async (teamData, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/players/${id}`);
+      const response = await axios.post(`${API_URL}/teams`, teamData);
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch player"
+        error.response?.data?.message || "Failed to create team"
       );
     }
   }
 );
 
-// Create player (admin only)
-export const createPlayer = createAsyncThunk(
-  "players/createPlayer",
-  async (playerData, { rejectWithValue }) => {
+// Add player to team
+export const addPlayerToTeam = createAsyncThunk(
+  "team/addPlayerToTeam",
+  async (playerId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/players`, playerData);
+      const response = await axios.post(`${API_URL}/teams/add-player`, {
+        playerId,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to create player"
+        error.response?.data?.message || "Failed to add player to team"
       );
     }
   }
 );
 
-// Update player (admin only)
-export const updatePlayer = createAsyncThunk(
-  "players/updatePlayer",
-  async ({ id, playerData }, { rejectWithValue }) => {
+// Remove player from team
+export const removePlayerFromTeam = createAsyncThunk(
+  "team/removePlayerFromTeam",
+  async (playerId, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(
-        `${API_URL}/players/${id}`,
-        playerData
+      const response = await axios.delete(
+        `${API_URL}/teams/remove-player/${playerId}`
       );
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to update player"
+        error.response?.data?.message || "Failed to remove player from team"
       );
     }
   }
 );
 
-// Delete player (admin only)
-export const deletePlayer = createAsyncThunk(
-  "players/deletePlayer",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(`${API_URL}/players/${id}`);
-      return { id, ...response.data };
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to delete player"
-      );
-    }
-  }
-);
-
-// Get player stats
-export const getPlayerStats = createAsyncThunk(
-  "players/getPlayerStats",
+// Get leaderboard
+export const getLeaderboard = createAsyncThunk(
+  "team/getLeaderboard",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/players/stats`);
+      const response = await axios.get(`${API_URL}/teams/leaderboard`);
       return response.data;
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch player stats"
+        error.response?.data?.message || "Failed to fetch leaderboard"
       );
     }
   }
 );
 
 const initialState = {
-  players: [],
-  player: null,
-  stats: null,
+  team: null,
+  leaderboard: [],
   loading: false,
   error: null,
+  remainingBudget: 0,
 };
 
-const playerSlice = createSlice({
-  name: "players",
+const teamSlice = createSlice({
+  name: "team",
   initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
     },
-    clearPlayer: (state) => {
-      state.player = null;
-    },
   },
   extraReducers: (builder) => {
     builder
-      // Get all players
-      .addCase(getPlayers.pending, (state) => {
+      // Get user team
+      .addCase(getUserTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getPlayers.fulfilled, (state, action) => {
+      .addCase(getUserTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.players = action.payload.players;
+        state.team = action.payload.team;
       })
-      .addCase(getPlayers.rejected, (state, action) => {
+      .addCase(getUserTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Get player by ID
-      .addCase(getPlayerById.pending, (state) => {
+      // Create team
+      .addCase(createTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getPlayerById.fulfilled, (state, action) => {
+      .addCase(createTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.player = action.payload.player;
+        state.team = action.payload.team;
       })
-      .addCase(getPlayerById.rejected, (state, action) => {
+      .addCase(createTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Create player
-      .addCase(createPlayer.pending, (state) => {
+      // Add player to team
+      .addCase(addPlayerToTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createPlayer.fulfilled, (state, action) => {
+      .addCase(addPlayerToTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.players = [...state.players, action.payload.player];
+        state.team = action.payload.team;
+        state.remainingBudget = action.payload.remainingBudget;
       })
-      .addCase(createPlayer.rejected, (state, action) => {
+      .addCase(addPlayerToTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Update player
-      .addCase(updatePlayer.pending, (state) => {
+      // Remove player from team
+      .addCase(removePlayerFromTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updatePlayer.fulfilled, (state, action) => {
+      .addCase(removePlayerFromTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.players = state.players.map((player) =>
-          player._id === action.payload.player._id
-            ? action.payload.player
-            : player
-        );
-        state.player = action.payload.player;
+        state.team = action.payload.team;
+        state.remainingBudget = action.payload.remainingBudget;
       })
-      .addCase(updatePlayer.rejected, (state, action) => {
+      .addCase(removePlayerFromTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Delete player
-      .addCase(deletePlayer.pending, (state) => {
+      // Get leaderboard
+      .addCase(getLeaderboard.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deletePlayer.fulfilled, (state, action) => {
+      .addCase(getLeaderboard.fulfilled, (state, action) => {
         state.loading = false;
-        state.players = state.players.filter(
-          (player) => player._id !== action.payload.id
-        );
+        state.leaderboard = action.payload.teams;
       })
-      .addCase(deletePlayer.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Get player stats
-      .addCase(getPlayerStats.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getPlayerStats.fulfilled, (state, action) => {
-        state.loading = false;
-        state.stats = action.payload.stats;
-      })
-      .addCase(getPlayerStats.rejected, (state, action) => {
+      .addCase(getLeaderboard.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { clearError, clearPlayer } = playerSlice.actions;
-export default playerSlice.reducer;
+export const { clearError } = teamSlice.actions;
+export default teamSlice.reducer;
