@@ -53,3 +53,19 @@ npm install
 npm run dev
 ```
 ![Image](https://github.com/user-attachments/assets/a8942b86-5af2-4687-8615-e98efd618e3d)
+
+![Image](https://github.com/user-attachments/assets/fe4d9bae-0226-451d-988c-9d014a5c
+
+![Image](https://github.com/user-attachments/assets/0fc568f7-00ae-42f3-aa7a-4595fa6feb3b)
+
+![Image](https://github.com/user-attachments/assets/81436b10-9b59-4c46-9a30-36ca13bbc07c)
+
+![Image](https://github.com/user-attachments/assets/f71bc93b-d2d0-4430-be9f-28791135d1fa)
+
+![Image](https://github.com/user-attachments/assets/ffd4e379-2cf4-4892-95d4-c2c4486510f6)
+
+![Image](https://github.com/user-attachments/assets/7b618c0b-9265-4806-99bc-468f13cc9368)
+
+![Image](https://github.com/user-attachments/assets/25857b96-2161-4e4c-a3c3-318bb72eb3ab)
+
+![Image](https://github.com/user-attachments/assets/54b2273a-bb37-4c1e-89c6-19265f9ba26a)
