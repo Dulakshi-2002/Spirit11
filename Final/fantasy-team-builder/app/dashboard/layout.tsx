@@ -109,7 +109,7 @@ export default function DashboardLayout({
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
           <header className="bg-blue-800 text-white p-4 shadow-md">
             <div className="container mx-auto flex justify-between items-center">
-              <h1 className="text-2xl font-bold">Fantasy Team Builder</h1>
+              <h1 className="text-3xl text-white">Fantasy Team Builder</h1>
               <div className="flex items-center gap-4">
                 {user && <span className="text-blue-200">Welcome, <span className="font-semibold text-white">{user.username}</span></span>}
                 <Button 
@@ -152,7 +152,7 @@ export default function DashboardLayout({
                     Budget
                   </TabsTrigger>
                 </TabsList>
-                <div className="bg-white dark:bg-blue-900/50 p-4 rounded-lg shadow-inner">
+                <div className="bg-white dark:bg-blue-900/50 p-20 rounded-lg shadow-inner">
                   <TabsContent value="players" className="mt-0">
                     <PlayersTab />
                   </TabsContent>

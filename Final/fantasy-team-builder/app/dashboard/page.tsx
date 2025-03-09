@@ -81,13 +81,13 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-blue-800 dark:text-blue-100">{teamCompleteness}</div>
-            <div className="mt-2 text-sm text-blue-600 dark:text-blue-300">Team completion</div>
+            <div className="mt-2 text-3xl text-blue-600 dark:text-blue-300">Team completion</div>
           </CardContent>
         </Card>
 
         <Card className="border-l-4 border-l-green-600 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-white to-blue-50 dark:from-blue-900 dark:to-blue-800">
           <CardHeader className="pb-2">
-            <CardTitle className="text-blue-700 dark:text-blue-200">Budget</CardTitle>
+            <CardTitle className="text-blue-700 dark:text-blue-200 text-3xl">Budget</CardTitle>
             <CardDescription className="text-blue-500 dark:text-blue-300">Your remaining budget</CardDescription>
           </CardHeader>
           <CardContent>
